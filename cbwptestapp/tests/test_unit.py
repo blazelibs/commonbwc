@@ -1,7 +1,8 @@
-
 from blazeweb.globals import ag
 from blazeweb.testing import inrequest
 from blazeweb.views import View
+
+from commonbwp.lib.views import FormMixin
 
 class TestForms(object):
 
