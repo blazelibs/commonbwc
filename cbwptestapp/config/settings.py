@@ -11,10 +11,14 @@ class Default(DefaultSettings):
         self.app_package = app_package
         DefaultSettings.init(self)
 
+        self.init_routing()
+
         self.add_plugin(app_package, 'common', 'commonbwp')
 
     def init_routing(self):
         self.add_route('/ft1', endpoint='FormTest1')
+        self.add_route('/ft2', endpoint='FormTest2')
+        self.add_route('/ft2/<cancel_type>', endpoint='FormTest2')
 
 class Dev(Default):
     def init(self):
