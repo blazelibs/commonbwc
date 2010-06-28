@@ -1,0 +1,17 @@
+{% set gridhtml = getcontent('datagrid:everything.html', datagrid=datagrid) %}
+{{ include_js() }}
+{% extends extend_from %}
+{% block title %}{{pagetitle}} | {{super()}}{% endblock %}
+{% block body %}
+    <h2>{{pagetitle}}</h2>
+    <p><a href="{{ url_for(endpoint, action='add')}}">Add {{objectname}}</a></p>
+
+    {% if gridhtml %}
+        {{ gridhtml|safe }}
+    {% else %}
+        <p>
+            Sorry, no {{objectnamepl}} currently in the database.
+            <a href="{{ url_for(endpoint, action='add')}}">Add One!</a>
+        </p>
+    {% endif %}
+{% endblock body%}
