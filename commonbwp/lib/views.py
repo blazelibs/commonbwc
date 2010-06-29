@@ -1,5 +1,3 @@
-from blazegrid.table import Table
-from blazegrid.columns import Column, UrlColumn
 from blazeweb.globals import settings, user
 from blazeweb.routing import url_for, current_url
 from blazeweb.utils import redirect, abort
