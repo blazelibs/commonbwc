@@ -17,7 +17,7 @@ class Default(DefaultSettings):
         ################################################################
         # DATABASE
         #######################################################################
-        self.db.url = 'sqlite:///'
+        self.db.url = 'sqlite://'
         self.db.echo = False
 
         #######################################################################
@@ -29,6 +29,7 @@ class Default(DefaultSettings):
         # application modules from our application or supporting applications
         self.add_plugin(app_package, 'common', 'commonbwp')
         self.add_plugin(app_package, 'sqlalchemy', 'sqlalchemybwp')
+        self.add_plugin(app_package, 'auth', 'authbwp')
         self.add_plugin(app_package, 'datagrid', 'datagridbwp')
 
     def init_routing(self):
@@ -37,6 +38,8 @@ class Default(DefaultSettings):
         self.add_route('/ft2/<cancel_type>', endpoint='FormTest2')
         self.add_route('/widget/<action>', endpoint='WidgetCrud')
         self.add_route('/widget/<action>/<int:objid>', endpoint='WidgetCrud')
+        self.add_route('/widget-auth/<action>', endpoint='WidgetCrudDeletePerm')
+        self.add_route('/widget-auth/<action>/<int:objid>', endpoint='WidgetCrudDeletePerm')
 
 class Dev(Default):
     def init(self):

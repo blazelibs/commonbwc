@@ -2,6 +2,7 @@ from blazeweb.globals import ag
 from blazeweb.testing import TestApp
 from nose.tools import eq_
 
+from authbwp.lib.testing import login_client_with_permissions
 from commonbwp.lib.testing import has_message
 from plugstack.sqlalchemy import db
 from cbwptestapp.model.orm import Widget
@@ -165,5 +166,21 @@ class TestCrud(object):
     def test_bad_action(self):
         r = self.ta.get('/widget/badaction', status=404)
         r = self.ta.get('/widget/badaction/999999', status=404)
+
+    def test_delete_protect(self):
+        w_id = self.create_widget(u'delete_protect_test_widget', u'black', 150).id
+
+        r = self.ta.get('/widget-auth/manage?filteron=type&filteronop=eq&filterfor=delete_protect_test_widget')
+        d = r.pyq
+        assert d('a[href="/widget-auth/edit/%s"]'%w_id).html() is not None
+        assert d('a[href="/widget-auth/delete/%s"]'%w_id).html() is None
+        r = self.ta.get('/widget-auth/delete/%s'%w_id, status=403)
+
+        login_client_with_permissions(self.ta, u'widget-delete')
+        r = self.ta.get('/widget-auth/manage?filteron=type&filteronop=eq&filterfor=delete_protect_test_widget')
+        d = r.pyq
+        assert d('a[href="/widget-auth/edit/%s"]'%w_id).html() is not None
+        assert d('a[href="/widget-auth/delete/%s"]'%w_id).html() is not None
+        r = self.ta.get('/widget-auth/delete/%s'%w_id, status=302)        
+        self.ta.get('/users/logout')
         
-    
