@@ -1,5 +1,5 @@
 from blazeweb.globals import user
-from blazeweb.views import View
+from blazeweb.views import View, asview
 from commonbwp.lib.views import CrudBase, FormMixin
 
 import cbwptestapp.forms as forms
@@ -94,3 +94,15 @@ class WidgetCrud(CrudBase):
             sort='both'
         )
         return dg
+
+class WidgetCrudDeletePerm(WidgetCrud):
+
+    def init(self):
+        WidgetCrud.init(self)
+        self.delete_protect = True
+        self.delete_require_any = 'widget-delete'
+
+@asview('/')
+def home_page():
+    return user.get_messages()
+    
