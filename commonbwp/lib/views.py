@@ -2,6 +2,7 @@ from blazeweb.globals import settings, user
 from blazeweb.routing import url_for, current_url
 from blazeweb.utils import redirect, abort
 from blazeweb.views import SecureView
+from savalidation import ValidationError
 from webhelpers.html import literal
 from webhelpers.html.tags import link_to
 from werkzeug import cached_property
@@ -33,6 +34,9 @@ class FormMixin(object):
         if self.form.is_valid():
             try:
                 return self.form_on_valid()
+            except ValidationError, e:
+                for inst in e.invalid_instances:
+                    self.form.add_field_errors(inst.validation_errors)
             except Exception, e:
                 # if the form can't handle the exception, re-raise it
                 if not self.form.handle_exception(e):

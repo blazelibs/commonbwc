@@ -183,4 +183,26 @@ class TestCrud(object):
         assert d('a[href="/widget-auth/delete/%s"]'%w_id).html() is not None
         r = self.ta.get('/widget-auth/delete/%s'%w_id, status=302)        
         self.ta.get('/users/logout')
-        
+
+class TestFormErrors(object):
+    @classmethod
+    def setup_class(cls):
+        cls.ta = TestApp(ag.wsgi_test_app)
+
+    def test_required(self):
+        r = self.ta.get('/widget/add')
+        r.form['widget_type'] = 'Type A'
+        r.form['color'] = 'silver'
+        r = r.form.submit('submit', status=200)
+        d = r.pyq
+        assert 'Quantity: field is required' in d('div#user_messages li:eq(0)').html()
+
+    def test_maxlength(self):
+        r = self.ta.get('/widget/add')
+        r.form['widget_type'] = ''.join(['a' for i in range(260)])
+        r.form['color'] = 'silver'
+        r.form['quantity'] = 125
+        r = r.form.submit('submit', status=200)
+        d = r.pyq
+        assert 'Type: Enter a value not greater than 255 characters long' in d('div#user_messages li:eq(0)').html()
+    
