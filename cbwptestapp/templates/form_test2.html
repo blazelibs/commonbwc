@@ -1,15 +1,5 @@
-{% for msg in user.get_messages() %}
-    {% if loop.first %}
-        <div id="user-messages">
-        <ul>
-    {% endif %}
-            <li>
-                <strong class="sev-{{ msg.severity }}">{{msg.severity}}</strong>: {{msg.text}}
-            </li>
-    {% if loop.last %}
-        </ul>
-        </div>
-    {% endif %}
-{% endfor %}
+{% extends 'layout.html' %}
 
+{% block body %}
 {{ form.render()|safe }}
+{% endblock body %}
