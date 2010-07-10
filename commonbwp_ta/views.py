@@ -2,7 +2,7 @@ from blazeweb.globals import user
 from blazeweb.views import View
 from commonbwp.lib.views import FormMixin
 
-import cbwptestapp.forms as forms
+import commonbwp_ta.forms as forms
 
 class FormTest1(View, FormMixin):
     def setup_view(self):
