@@ -2,7 +2,7 @@ from blazeweb.application import WSGIApp
 from blazeweb.middleware import minimal_wsgi_stack
 from blazeweb.scripting import application_entry
 
-import cbwptestapp.config.settings as settingsmod
+import commonbwp_ta.config.settings as settingsmod
 
 def make_wsgi(profile='Dev'):
     app = WSGIApp(settingsmod, profile)
