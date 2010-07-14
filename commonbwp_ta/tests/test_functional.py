@@ -75,3 +75,30 @@ class TestForm2(object):
         r.form['email'] = ''
         r = r.form.submit('submit')
         assert has_message(r.pyq, 'error', 'Email: email is empty')
+
+
+class TestErrorCodes(object):
+
+    @classmethod
+    def setup_class(cls):
+        cls.ta = TestApp(ag.wsgi_test_app)
+
+    def test_400(self):
+        r = self.ta.get('/ectest/400', status=400)
+        assert '<h1>Bad Request Error Encountered</h1>' in r
+
+    def test_401(self):
+        r = self.ta.get('/ectest/401', status=401)
+        assert '<h1>Authorization Error Encountered</h1>' in r
+
+    def test_403(self):
+        r = self.ta.get('/ectest/403', status=403)
+        assert '<h1>Forbidden Error Encountered</h1>' in r
+
+    def test_404(self):
+        r = self.ta.get('/ectest/404', status=404)
+        assert '<h1>404 Not Found Error Encountered</h1>' in r
+
+    def test_500(self):
+        r = self.ta.get('/ectest/500', status=500)
+        assert '<h1>Application Error Encountered</h1>' in r

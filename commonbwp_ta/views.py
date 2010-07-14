@@ -1,4 +1,5 @@
 from blazeweb.globals import user
+from blazeweb.utils import abort
 from blazeweb.views import View
 from commonbwp.lib.views import FormMixin
 
@@ -34,3 +35,7 @@ class FormTest2(View, FormMixin):
         if not self.form.els.email.value:
             raise ValueError('email is empty')
         user.add_message('notice', 'Hello %s' % self.form.els.name.value)
+
+class ErrorViews(View):
+    def default(self, errorcode):
+        abort(errorcode)

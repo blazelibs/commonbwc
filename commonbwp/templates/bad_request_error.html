@@ -1,0 +1,6 @@
+{% extends settings.template.default %}
+{% block title %}Bad Request Error | {{super()}}{% endblock %}
+{% block body %}
+    <h1>Bad Request Error Encountered</h1>
+    <p> Sorry, but your request included arguments that could not be processed.</p>
+{% endblock body%}
