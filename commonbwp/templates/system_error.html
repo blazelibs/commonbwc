@@ -1,0 +1,9 @@
+{% extends settings.template.default %}
+{% block title %}Application Error | {{super()}}{% endblock %}
+{% block body %}
+    <h1>Application Error Encountered</h1>
+    <p>
+        Sorry, we encountered a system error when trying to handle your request.
+        The website administrators have been notified of this error.
+    </p>
+{% endblock body%}

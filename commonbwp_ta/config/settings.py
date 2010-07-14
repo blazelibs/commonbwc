@@ -15,10 +15,13 @@ class Default(DefaultSettings):
 
         self.add_plugin(app_package, 'common', 'commonbwp')
 
+        self.template.default = 'layout.html'
+
     def init_routing(self):
         self.add_route('/ft1', endpoint='FormTest1')
         self.add_route('/ft2', endpoint='FormTest2')
         self.add_route('/ft2/<cancel_type>', endpoint='FormTest2')
+        self.add_route('/ectest/<int:errorcode>', endpoint='ErrorViews')
 
 class Dev(Default):
     def init(self):
