@@ -8,7 +8,7 @@ from blazeweb.utils import registry_has_object, werkzeug_multi_dict_conv
 
 class Form(BlazeForm):
     note_prefix = '- '
-    error_prefix = '- '
+    error_prefix = None
     req_note_level = 'section'
     req_note = None
 
