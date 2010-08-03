@@ -67,7 +67,7 @@ class TestForm2(object):
         r = self.ta.get('/ft2')
         r = r.form.submit('submit')
         d = r.pyq
-        assert d('#name-form-name-fw p.error').text() == '- field is required', r
+        assert d('#name-form-name-fw p.error').text() == 'field is required', r
 
     def test_exception_handling(self):
         r = self.ta.get('/ft2')
