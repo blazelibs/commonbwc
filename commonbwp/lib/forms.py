@@ -12,7 +12,7 @@ class Form(BlazeForm):
     req_note_level = 'section'
     req_note = None
 
-    def __init__(self, name=None, **kwargs):
+    def __init__(self, name=None, auto_init=True, **kwargs):
         if name is None:
             name = case_cw2dash(self.__class__.__name__)
         if registry_has_object(rg):
@@ -23,7 +23,8 @@ class Form(BlazeForm):
         kwargs.setdefault('class_', 'generated')
         BlazeForm.__init__(self, name, action=action, **kwargs)
         self._request_submitted = False
-        self.init()
+        if auto_init:
+            self.init()
 
     def assign_from_request(self, req):
         to_submit = werkzeug_multi_dict_conv(req.form)

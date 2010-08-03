@@ -13,10 +13,10 @@ class FormMixin(object):
         self.cancel_url = None
         self.cancel_endpoint = None
         self.form_assign(formcls)
-        self.form_assign_defaults()
 
     def form_assign(self, formcls):
         self.form = formcls()
+        self.form_assign_defaults()
 
     def post(self):
         retval = self.form_submission()
@@ -79,8 +79,10 @@ class CrudBase(SecureView, FormMixin):
         self.objname = objname
         self.objnamepl = objnamepl
         self.formcls = formcls
+        self.form = None
         self.ormcls = ormcls
         self.objinst = None
+        self.form_auto_init = True
 
         # templating and endpoints
         self.extend_from = settings.template.admin
@@ -168,6 +170,11 @@ class CrudBase(SecureView, FormMixin):
         self.assign('objectnamepl', self.objnamepl)
         self.assign('extend_from', self.extend_from)
 
+    def form_assign(self, formcls):
+        self.form = formcls(auto_init=self.form_auto_init)
+        if self.form_auto_init:
+            self.form_assign_defaults()
+
     def form_assign_defaults(self):
         if self.action == self.EDIT:
             self.form.set_defaults(self.objinst.to_dict())
@@ -176,8 +183,10 @@ class CrudBase(SecureView, FormMixin):
         self.assign('form', self.form)
         self.assign('extend_from', self.extend_from)
         if self.action == self.ADD:
+            self.assign('form_action', 'add')
             pagetitle = self.add_title % {'objname':self.objname}
         else:
+            self.assign('form_action', 'edit')
             pagetitle = self.edit_title % {'objname':self.objname}
         self.assign('pagetitle', pagetitle)
 
@@ -186,12 +195,18 @@ class CrudBase(SecureView, FormMixin):
         self.render_endpoint(self.addedit_template_endpoint)
 
     def form_on_valid(self):
+        self.form_save_data()
+        self.form_when_completed()
+
+    def form_save_data(self):
         if self.action == self.ADD:
-            self.form_orm_add()
+            self.form_resulting_entity = self.form_orm_add()
             user.add_message('notice', '%s added successfully' % self.objname)
         else:
-            self.form_orm_edit()
+            self.form_resulting_entity = self.form_orm_edit()
             user.add_message('notice', '%s edited successfully' % self.objname)
+
+    def form_when_completed(self):
         redirect(url_for(self.endpoint, action='manage'))
 
     def form_orm_add(self):
@@ -214,4 +229,7 @@ class CrudBase(SecureView, FormMixin):
             user.add_message('notice', '%s deleted successfully' % self.objname)
         else:
             user.add_message('warning', 'could not delete, the %s no longer existed' % self.objname)
+        self.delete_when_completed()
+
+    def delete_when_completed(self):
         redirect(url_for(self.endpoint, action='manage'))
