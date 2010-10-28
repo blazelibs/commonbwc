@@ -5,7 +5,7 @@ from commonbwp import VERSION
 setup(
     name='CommonBWP',
     version=VERSION,
-    description="A BlazeWeb plugin to hold libraries shared by other plugins and apps.",
+    description="A BlazeWeb component to hold libraries shared by other components and apps.",
     classifiers=[
     'Development Status :: 4 - Beta',
     'Intended Audience :: Developers',

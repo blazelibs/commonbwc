@@ -1,6 +1,6 @@
-from blazeweb.config import PluginSettings
+from blazeweb.config import ComponentSettings
 
-class Settings(PluginSettings):
+class Settings(ComponentSettings):
 
     def init(self):
         #######################################################################
