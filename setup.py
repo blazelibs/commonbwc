@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 
-from commonbwp import VERSION
+from commonbwc import VERSION
 
 setup(
-    name='CommonBWP',
+    name='CommonBWC',
     version=VERSION,
     description="A BlazeWeb component to hold libraries shared by other components and apps.",
     classifiers=[
@@ -15,7 +15,7 @@ setup(
     author_email='rsyring@gmail.com',
     url='',
     license='BSD',
-    packages=find_packages(exclude=['cbwptestapp']),
+    packages=find_packages(exclude=['commonbwc_ta']),
     zip_safe=False,
     install_requires=[
         'BlazeForm>=0.3.0dev',
