@@ -2,7 +2,7 @@ from blazeweb.globals import ag
 from blazeweb.testing import TestApp
 from nose.tools import eq_
 
-from commonbwp.lib.testing import has_message
+from commonbwc.lib.testing import has_message
 
 class TestForm1(object):
     @classmethod

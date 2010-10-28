@@ -13,7 +13,7 @@ class Default(DefaultSettings):
 
         self.init_routing()
 
-        self.add_component(app_package, 'common', 'commonbwp')
+        self.add_component(app_package, 'common', 'commonbwc')
 
         self.template.default = 'layout.html'
 

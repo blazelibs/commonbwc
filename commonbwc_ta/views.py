@@ -1,9 +1,9 @@
 from blazeweb.globals import user
 from blazeweb.utils import abort
 from blazeweb.views import View
-from commonbwp.lib.views import FormMixin
+from commonbwc.lib.views import FormMixin
 
-import commonbwp_ta.forms as forms
+import commonbwc_ta.forms as forms
 
 class FormTest1(View, FormMixin):
     def setup_view(self):
