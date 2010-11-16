@@ -1,0 +1,5 @@
+recursive-include commonbwc *
+recursive-exclude commonbwc *.pyc
+recursive-include commonbwc_ta *
+recursive-exclude commonbwc_ta *.pyc
+include credits.txt

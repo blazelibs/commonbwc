@@ -38,7 +38,8 @@ setup(
     author_email='rsyring@gmail.com',
     url='http://bitbucket.org/rsyring/commonbwc/',
     license='BSD',
-    packages=find_packages(exclude=['commonbwc_ta']),
+    packages=find_packages(exclude=['commonbwc_*']),
+    include_package_data = True,
     zip_safe=False,
     install_requires=[
         'BlazeForm>=0.3.0',
