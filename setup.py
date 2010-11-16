@@ -36,7 +36,7 @@ setup(
     ],
     author='Randy Syring',
     author_email='rsyring@gmail.com',
-    url='',
+    url='http://bitbucket.org/rsyring/commonbwc/',
     license='BSD',
     packages=find_packages(exclude=['commonbwc_ta']),
     zip_safe=False,
