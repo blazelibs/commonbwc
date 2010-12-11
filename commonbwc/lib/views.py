@@ -69,7 +69,7 @@ class FormMixin(object):
         self.assign('form', self.form)
         self.render_template()
 
-class CrudBase(SecureView, FormMixin):
+class CrudMixin(FormMixin):
     MANAGE = 1
     EDIT = 2
     DELETE = 3
@@ -233,3 +233,6 @@ class CrudBase(SecureView, FormMixin):
 
     def delete_when_completed(self):
         redirect(url_for(self.endpoint, action='manage'))
+
+class CrudBase(SecureView, CrudMixin):
+    pass
