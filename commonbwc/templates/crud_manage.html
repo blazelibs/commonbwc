@@ -3,8 +3,8 @@
 {% extends extend_from %}
 {% block title %}{{pagetitle}} | {{super()}}{% endblock %}
 {% block body %}
-    <h2>{{pagetitle}}</h2>
     <p class="manage-add-link"><a href="{{ url_for(endpoint, action='add')}}">Add {{objectname}}</a></p>
+    <h2>{{pagetitle}}</h2>
 
     {% if gridhtml %}
         {{ gridhtml|safe }}
