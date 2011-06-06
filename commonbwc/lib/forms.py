@@ -71,8 +71,8 @@ class Form(BlazeForm):
     def _handle_savalidation_errors(self, exc):
         # used to indicate if all errors were assignable for at least one instance.
         # If not, consider handling the validation to have failed
-        all_errors_handled = False
+        all_errors_handled = True
         for inst in exc.invalid_instances:
-            if self.add_field_errors(inst.validation_errors):
-                all_errors_handled = True
+            if not self.add_field_errors(inst.validation_errors):
+                all_errors_handled = False
         return all_errors_handled
