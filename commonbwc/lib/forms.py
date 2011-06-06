@@ -6,6 +6,12 @@ from blazeweb.globals import rg, user
 from blazeweb.routing import current_url
 from blazeweb.utils import registry_has_object, werkzeug_multi_dict_conv
 
+try:
+    from savalidation import ValidationError
+    savalidation = True
+except ImportError:
+    savalidation = None
+
 class Form(BlazeForm):
     note_prefix = '- '
     error_prefix = None
@@ -25,6 +31,8 @@ class Form(BlazeForm):
         self._request_submitted = False
         if auto_init:
             self.init()
+        if savalidation:
+            self.add_handler(exc_type=ValidationError, callback=self._handle_savalidation_errors)
 
     def assign_from_request(self, req):
         to_submit = werkzeug_multi_dict_conv(req.form)
@@ -59,3 +67,12 @@ class Form(BlazeForm):
         if self.req_note:
             kwargs.setdefault('req_note', self.req_note)
         return BlazeForm.render(self, **kwargs)
+
+    def _handle_savalidation_errors(self, exc):
+        # used to indicate if all errors were assignable for at least one instance.
+        # If not, consider handling the validation to have failed
+        all_errors_handled = False
+        for inst in exc.invalid_instances:
+            if self.add_field_errors(inst.validation_errors):
+                all_errors_handled = True
+        return all_errors_handled
