@@ -8,3 +8,6 @@
 glob:sabwptestapp/config/site_settings.py
 glob:cover
 glob:.coverage
+syntax: glob
+coverage.xml
+nosetests.xml
