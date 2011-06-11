@@ -1,26 +1,9 @@
-"""
-Introduction
----------------
-
-CommonBWC is a component for `BlazeWeb <http://pypi.python.org/pypi/BlazeWeb/>`_
-applications.  It has views, classes, and templates that are common for many
-web applications.
-
-Questions & Comments
----------------------
-
-Please visit: http://groups.google.com/group/blazelibs
-
-Current Status
----------------
-
-The code stays pretty stable, but the API is likely to change in the future.
-
-The `CommonBWC tip <http://bitbucket.org/rsyring/commonbwc/get/tip.zip#egg=commonbwc-dev>`_
-is installable via `easy_install` with ``easy_install commonbwc==dev``
-"""
-
+import os
 from setuptools import setup, find_packages
+
+cdir = os.path.abspath(os.path.dirname(__file__))
+README = open(os.path.join(cdir, 'readme.rst')).read()
+CHANGELOG = open(os.path.join(cdir, 'changelog.rst')).read()
 
 from commonbwc import VERSION
 
@@ -28,11 +11,16 @@ setup(
     name='CommonBWC',
     version=VERSION,
     description="A BlazeWeb component to hold libraries shared by other components and apps.",
-    long_description = __doc__,
+    long_description=README + '\n\n' + CHANGELOG,
     classifiers=[
-    'Development Status :: 4 - Beta',
-    'Intended Audience :: Developers',
-    'License :: OSI Approved :: BSD License',
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: BSD License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 2.5',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Topic :: Internet :: WWW/HTTP'
     ],
     author='Randy Syring',
     author_email='rsyring@gmail.com',
