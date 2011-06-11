@@ -112,7 +112,7 @@ class CrudMixin(FormMixin):
         elif action == 'edit':
             self.action = self.EDIT
             if not objid:
-                abort(404)
+                abort(404) #objid was not given
         elif action == 'add':
             self.action = self.ADD
             if objid:
