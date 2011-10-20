@@ -27,4 +27,4 @@ pip install -r pip-jenkins-reqs.txt
 python setup.py --quiet develop
 
 # run tests
-nosetests "$PACKAGE" --blazeweb-package="$PACKAGE" --with-coverage --cover-package="$PACKAGE,commonbwc" --with-xunit --with-xcoverage --cover-tests
+nosetests "$PACKAGE" --blazeweb-package="$PACKAGE" --cover-package="$PACKAGE,commonbwc" --with-xunit --with-xcoverage --cover-tests
