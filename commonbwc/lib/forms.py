@@ -1,3 +1,4 @@
+import logging
 
 from blazeform.form import Form as BlazeForm
 from blazeform.util import NotGiven
@@ -11,6 +12,8 @@ try:
     savalidation = True
 except ImportError:
     savalidation = None
+
+log = logging.getLogger(__name__)
 
 class Form(BlazeForm):
     note_prefix = '- '
@@ -75,4 +78,5 @@ class Form(BlazeForm):
         for inst in exc.invalid_instances:
             if not self.add_field_errors(inst.validation_errors):
                 all_errors_handled = False
+                log.debug('Validation errors not handled: %s' % inst.validation_errors)
         return all_errors_handled
