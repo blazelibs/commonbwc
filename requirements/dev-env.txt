@@ -1,0 +1,8 @@
+-r common.txt
+
+coverage
+flake8
+pyquery
+tox
+webtest
+
