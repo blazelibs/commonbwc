@@ -4,6 +4,7 @@ from nose.tools import eq_
 
 from commonbwc.lib.testing import has_message
 
+
 class TestForm1(object):
     @classmethod
     def setup_class(cls):
@@ -37,6 +38,7 @@ class TestForm1(object):
         r.form['email'] = ''
         r = r.form.submit('submit')
         assert 'invalid' == r.body, r
+
 
 class TestForm2(object):
     @classmethod

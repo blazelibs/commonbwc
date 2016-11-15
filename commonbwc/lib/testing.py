@@ -1,5 +1,6 @@
 from blazeutils.strings import normalizews
 
+
 def has_message(d, sev, message, container_id='user-messages'):
     for li in d('#%s ul li' % container_id):
         li = d.__class__(li)
@@ -10,6 +11,7 @@ def has_message(d, sev, message, container_id='user-messages'):
             continue
         if normalizews(li.text()) == '%s : %s' % (sev, message):
             return True
+
 
 def user_messages(d, container_id='user-messages'):
     messages = []

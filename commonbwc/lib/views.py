@@ -6,6 +6,7 @@ from webhelpers.html import literal
 from webhelpers.html.tags import link_to
 from werkzeug import cached_property
 
+
 class FormMixin(object):
 
     def form_init(self, formcls):
@@ -58,6 +59,7 @@ class FormMixin(object):
         if self.cancel_endpoint:
             return url_for(self.cancel_endpoint)
         return current_url(strip_host=True)
+
     def _set_cancel_url(self, url):
         self._cancel_url = url
     cancel_url = property(_get_cancel_url, _set_cancel_url)
@@ -68,6 +70,7 @@ class FormMixin(object):
     def form_default_action(self):
         self.assign('form', self.form)
         self.render_template()
+
 
 class CrudMixin(FormMixin):
     MANAGE = 1
@@ -112,7 +115,7 @@ class CrudMixin(FormMixin):
         elif action == 'edit':
             self.action = self.EDIT
             if not objid:
-                abort(404) #objid was not given
+                abort(404)  # objid was not given
         elif action == 'add':
             self.action = self.ADD
             if objid:
@@ -137,7 +140,8 @@ class CrudMixin(FormMixin):
 
     @cached_property
     def delete_is_authorized(self):
-        return not self.delete_protect or self.auth_calculate_any_all(self.delete_require_any, self.delete_require_all)
+        return not self.delete_protect or \
+            self.auth_calculate_any_all(self.delete_require_any, self.delete_require_all)
 
     def form_init(self, formcls):
         FormMixin.form_init(self, formcls)
@@ -150,11 +154,13 @@ class CrudMixin(FormMixin):
 
     def manage_action_links(self, row):
         idc = self.ormcls.__table__.c.id
-        edit_link = link_to('(edit)', url_for(self.endpoint, action='edit', objid=row[idc]), class_='edit_link', title='edit %s' % self.objname)
+        edit_link = link_to('(edit)', url_for(self.endpoint, action='edit', objid=row[idc]),
+                            class_='edit_link', title='edit %s' % self.objname)
         if self.delete_is_authorized:
             return literal('%s%s') % \
-                (link_to('(delete)', url_for(self.endpoint, action='delete', objid=row[idc]), class_='delete_link', title='delete %s' % self.objname),
-                edit_link)
+                (link_to('(delete)', url_for(self.endpoint, action='delete', objid=row[idc]),
+                         class_='delete_link', title='delete %s' % self.objname),
+                 edit_link)
         else:
             return literal(edit_link)
 
@@ -164,7 +170,7 @@ class CrudMixin(FormMixin):
         # attribute errors in our code
         dg.html_table
         self.assign('datagrid', dg)
-        self.assign('pagetitle', self.manage_title % {'objnamepl':self.objnamepl} )
+        self.assign('pagetitle', self.manage_title % {'objnamepl': self.objnamepl})
         self.assign('endpoint', self.endpoint)
         self.assign('objectname', self.objname)
         self.assign('objectnamepl', self.objnamepl)
@@ -184,10 +190,10 @@ class CrudMixin(FormMixin):
         self.assign('extend_from', self.extend_from)
         if self.action == self.ADD:
             self.assign('form_action', 'add')
-            pagetitle = self.add_title % {'objname':self.objname}
+            pagetitle = self.add_title % {'objname': self.objname}
         else:
             self.assign('form_action', 'edit')
-            pagetitle = self.edit_title % {'objname':self.objname}
+            pagetitle = self.edit_title % {'objname': self.objname}
         self.assign('pagetitle', pagetitle)
 
     def form_default_action(self):
@@ -228,11 +234,13 @@ class CrudMixin(FormMixin):
         if self.ormcls.delete(self.objid):
             user.add_message('notice', '%s deleted successfully' % self.objname)
         else:
-            user.add_message('warning', 'could not delete, the %s no longer existed' % self.objname)
+            user.add_message('warning',
+                             'could not delete, the %s no longer existed' % self.objname)
         self.delete_when_completed()
 
     def delete_when_completed(self):
         redirect(url_for(self.endpoint, action='manage'))
+
 
 class CrudBase(SecureView, CrudMixin):
     pass
