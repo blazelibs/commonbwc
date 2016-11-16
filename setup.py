@@ -4,8 +4,7 @@ from setuptools import setup, find_packages
 cdir = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(cdir, 'readme.rst')).read()
 CHANGELOG = open(os.path.join(cdir, 'changelog.rst')).read()
-
-from commonbwc import VERSION
+VERSION = open(os.path.join(cdir, 'commonbwc', 'version.txt')).read().strip()
 
 setup(
     name='CommonBWC',
@@ -17,14 +16,14 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 2.5',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Topic :: Internet :: WWW/HTTP'
     ],
     author='Randy Syring',
-    author_email='rsyring@gmail.com',
-    url='http://bitbucket.org/rsyring/commonbwc/',
+    author_email='randy.syring@level12.io',
+    url='https://github.com/blazelibs/commonbwc/',
     license='BSD',
     packages=find_packages(exclude=['commonbwc_*']),
     include_package_data = True,
