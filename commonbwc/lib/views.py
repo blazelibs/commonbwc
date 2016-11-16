@@ -2,8 +2,8 @@ from blazeweb.globals import settings, user
 from blazeweb.routing import url_for, current_url
 from blazeweb.utils import redirect, abort
 from blazeweb.views import SecureView
-from webhelpers.html import literal
-from webhelpers.html.tags import link_to
+from webhelpers2.html import literal
+from webhelpers2.html.tags import link_to
 from werkzeug import cached_property
 
 
@@ -34,7 +34,7 @@ class FormMixin(object):
         if self.form.is_valid():
             try:
                 return self.form_on_valid()
-            except Exception, e:
+            except Exception as e:
                 # if the form can't handle the exception, re-raise it
                 if not self.form.handle_exception(e):
                     raise
@@ -53,16 +53,17 @@ class FormMixin(object):
     def form_on_cancel(self):
         redirect(self.cancel_url)
 
-    def _get_cancel_url(self):
+    @property
+    def cancel_url(self):
         if self._cancel_url:
             return self._cancel_url
         if self.cancel_endpoint:
             return url_for(self.cancel_endpoint)
         return current_url(strip_host=True)
 
-    def _set_cancel_url(self, url):
+    @cancel_url.setter
+    def cancel_url(self, url):
         self._cancel_url = url
-    cancel_url = property(_get_cancel_url, _set_cancel_url)
 
     def default(self):
         return self.form_default_action()
