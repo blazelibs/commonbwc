@@ -1,3 +1,15 @@
+CommonBWC
+=========
+
+.. image:: https://ci.appveyor.com/api/projects/status/kuulcvd82mq6awi0?svg=true
+    :target: https://ci.appveyor.com/project/level12/commonbwc
+
+.. image:: https://circleci.com/gh/blazelibs/commonbwc.svg?style=shield
+    :target: https://circleci.com/gh/blazelibs/commonbwc
+
+.. image:: https://codecov.io/gh/blazelibs/commonbwc/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/blazelibs/commonbwc
+
 Introduction
 ---------------
 
