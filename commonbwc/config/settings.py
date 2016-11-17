@@ -1,5 +1,6 @@
 from blazeweb.config import ComponentSettings
 
+
 class Settings(ComponentSettings):
 
     def init(self):

@@ -1,7 +1,6 @@
 import logging
 
 from blazeform.form import Form as BlazeForm
-from blazeform.util import NotGiven
 from blazeutils.strings import case_cw2dash
 from blazeweb.globals import rg, user
 from blazeweb.routing import current_url
@@ -14,6 +13,7 @@ except ImportError:
     savalidation = None
 
 log = logging.getLogger(__name__)
+
 
 class Form(BlazeForm):
     note_prefix = '- '

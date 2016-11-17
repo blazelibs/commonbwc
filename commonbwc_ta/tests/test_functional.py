@@ -4,6 +4,7 @@ from nose.tools import eq_
 
 from commonbwc.lib.testing import has_message
 
+
 class TestForm1(object):
     @classmethod
     def setup_class(cls):
@@ -19,24 +20,25 @@ class TestForm1(object):
         r = self.ta.get('/ft1')
         r.form['name'] = 'Fred'
         r = r.form.submit('submit')
-        assert 'Hello Fred' == r.body, r
+        assert b'Hello Fred' == r.body, r
 
     def test_form_cancel(self):
         r = self.ta.get('/ft1')
         r = r.form.submit('cancel')
-        assert 'cancelled' == r.body, r
+        assert b'cancelled' == r.body, r
 
     def test_form_invalid(self):
         r = self.ta.get('/ft1')
         r = r.form.submit('submit')
-        assert 'invalid' == r.body, r
+        assert b'invalid' == r.body, r
 
     def test_exception_handling(self):
         r = self.ta.get('/ft1')
         r.form['name'] = 'Fred'
         r.form['email'] = ''
         r = r.form.submit('submit')
-        assert 'invalid' == r.body, r
+        assert b'invalid' == r.body, r
+
 
 class TestForm2(object):
     @classmethod
