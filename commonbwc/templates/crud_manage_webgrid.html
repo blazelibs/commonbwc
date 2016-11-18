@@ -1,0 +1,13 @@
+{{ include_js('common:crud_manage.js') }}
+{% extends extend_from %}
+{% block title %}{{ pagetitle }} | {{super()}}{% endblock%}
+{% block body %}
+    <p class="manage-add-link">
+        <a href="{{ url_for(endpoint, action='add', session_key=grid.session_key) }}">Add Record</a>
+    </p>
+    <h2>{{ pagetitle }}
+        <a href="{{ grid.html.xls_url() }}"
+           title="Export to Excel" class="excel-link">Excel Report</a>
+    </h2>
+    {{ grid.html()|content }}
+{% endblock body%}

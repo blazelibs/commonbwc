@@ -6,6 +6,12 @@ from webhelpers2.html import literal
 from webhelpers2.html.tags import link_to
 from werkzeug import cached_property
 
+try:
+    from sqlalchemy.exc import IntegrityError
+except ImportError:
+    class IntegrityError(Exception):
+        pass
+
 
 class FormMixin(object):
 
@@ -74,23 +80,30 @@ class FormMixin(object):
 
 
 class CrudMixin(FormMixin):
+    # self.action may be referenced by these integers
     MANAGE = 1
     EDIT = 2
     DELETE = 3
     ADD = 4
 
-    def init(self, objname, objnamepl, formcls, ormcls):
+    def init(self, objname, objnamepl, formcls, ormcls, gridcls=None):
+        # the view supports datagridbwc for backwards compatibility, but if webgrid is passed or
+        # set on the view, it will be used accordingly
         self.objname = objname
         self.objnamepl = objnamepl
         self.formcls = formcls
         self.form = None
         self.ormcls = ormcls
+        self.gridcls = gridcls
         self.objinst = None
         self.form_auto_init = True
 
         # templating and endpoints
         self.extend_from = settings.template.admin
-        self.manage_template_endpoint = 'common:crud_manage.html'
+        if not gridcls:
+            self.manage_template_endpoint = 'common:crud_manage.html'
+        else:
+            self.manage_template_endpoint = 'common:crud_manage_webgrid.html'
         self.addedit_template_endpoint = 'common:crud_addedit.html'
         self.delete_template_endpoint = 'common:crud_delete.html'
 
@@ -108,7 +121,8 @@ class CrudMixin(FormMixin):
     def use_form(self):
         return self.action in (self.ADD, self.EDIT)
 
-    def auth_post(self, action=None, objid=None):
+    def auth_post(self, action=None, objid=None, session_key=None):
+        self.session_key = session_key
         if action == 'manage' or action is None:
             self.action = self.MANAGE
             if objid:
@@ -167,15 +181,26 @@ class CrudMixin(FormMixin):
 
     def manage_assign_vars(self):
         dg = self.manage_init_grid()
-        # pull the datagrid html right now.  This keeps Jinja from hiding
-        # attribute errors in our code
-        dg.html_table
-        self.assign('datagrid', dg)
+        if not self.gridcls:
+            # pull the datagrid html right now.  This keeps Jinja from hiding
+            # attribute errors in our code
+            dg.html_table
+            self.assign('datagrid', dg)
+        else:
+            self.assign('grid', dg)
         self.assign('pagetitle', self.manage_title % {'objnamepl': self.objnamepl})
         self.assign('endpoint', self.endpoint)
         self.assign('objectname', self.objname)
         self.assign('objectnamepl', self.objnamepl)
         self.assign('extend_from', self.extend_from)
+        self.assign('session_key', self.session_key)
+
+    def manage_init_grid(self):
+        grid = self.gridcls()
+        grid.apply_qs_args()
+        if grid.export_to == 'xls':
+            grid.xls.as_response()
+        return grid
 
     def form_assign(self, formcls):
         self.form = formcls(auto_init=self.form_auto_init)
@@ -232,11 +257,15 @@ class CrudMixin(FormMixin):
             self.delete_record()
 
     def delete_record(self):
-        if self.ormcls.delete(self.objid):
-            user.add_message('notice', '%s deleted successfully' % self.objname)
-        else:
-            user.add_message('warning',
-                             'could not delete, the %s no longer existed' % self.objname)
+        try:
+            if self.ormcls.delete(self.objid):
+                user.add_message('notice', '%s deleted successfully' % self.objname)
+            else:
+                user.add_message('warning',
+                                 'could not delete, the %s no longer existed' % self.objname)
+        except IntegrityError:
+            user.add_message('warning', 'could not delete, the %s is in use' % self.objname)
+
         self.delete_when_completed()
 
     def delete_when_completed(self):
