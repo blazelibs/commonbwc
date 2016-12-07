@@ -1,10 +1,10 @@
 Changelog
 ---------------
 
-0.2.1 released <in development>
+0.2.1 released 2016-12-07
 =========================
 
-* ?
+* added GridMixin and improved session_key preservation through CRUD view
 
 0.2.0 released 2016-11-23
 =========================

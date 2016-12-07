@@ -2,6 +2,7 @@ from blazeweb.globals import settings, user
 from blazeweb.routing import url_for, current_url
 from blazeweb.utils import redirect, abort
 from blazeweb.views import SecureView
+from formencode.validators import String
 from webhelpers2.html import literal
 from webhelpers2.html.tags import link_to
 from werkzeug import cached_property
@@ -79,7 +80,41 @@ class FormMixin(object):
         self.render_template()
 
 
-class CrudMixin(FormMixin):
+class GridMixin(object):
+    gridcls = None
+    grid_sheet_name = None
+    grid_endpoint = None
+
+    def grid_apply_overrides(self):
+        pass
+
+    def grid_init(self):
+        # gridcls can be a grid class, or another callable that returns a grid instance
+        self.grid = grid = self.gridcls()
+
+        # apply query string arguments first, so webgrid handles its own stuff
+        grid.apply_qs_args()
+
+        # separate method for allowing customization of filters. A lot of this can be done via
+        #   default filters in webgrid itself, but sometimes a column's filter depends on another
+        #   column, or something similar
+        self.grid_apply_overrides()
+
+        # if the request is for an XLS export, short-circuit the process here and return
+        if grid.export_to == 'xls':
+            grid.xls.as_response(sheet_name=self.grid_sheet_name)
+
+        return grid
+
+    def default(self):
+        self.grid_init()
+        self.assign('grid', self.grid)
+        if self.grid_endpoint:
+            self.render_endpoint(self.grid_endpoint)
+        self.render_template()
+
+
+class CrudMixin(FormMixin, GridMixin):
     # self.action may be referenced by these integers
     MANAGE = 1
     EDIT = 2
@@ -116,6 +151,8 @@ class CrudMixin(FormMixin):
         self.manage_title = 'Manage %(objnamepl)s'
         self.add_title = 'Add %(objname)s'
         self.edit_title = 'Edit %(objname)s'
+
+        self.add_processor('session_key', String)
 
     @property
     def use_form(self):
@@ -160,7 +197,7 @@ class CrudMixin(FormMixin):
 
     def form_init(self, formcls):
         FormMixin.form_init(self, formcls)
-        self.cancel_url = url_for(self.endpoint, action='manage')
+        self.cancel_url = url_for(self.endpoint, action='manage', session_key=self.session_key)
 
     def post(self):
         if not self.use_form:
@@ -196,11 +233,7 @@ class CrudMixin(FormMixin):
         self.assign('session_key', self.session_key)
 
     def manage_init_grid(self):
-        grid = self.gridcls()
-        grid.apply_qs_args()
-        if grid.export_to == 'xls':
-            grid.xls.as_response()
-        return grid
+        return self.grid_init()
 
     def form_assign(self, formcls):
         self.form = formcls(auto_init=self.form_auto_init)
@@ -239,7 +272,7 @@ class CrudMixin(FormMixin):
             user.add_message('notice', '%s edited successfully' % self.objname)
 
     def form_when_completed(self):
-        redirect(url_for(self.endpoint, action='manage'))
+        redirect(url_for(self.endpoint, action='manage', session_key=self.session_key))
 
     def form_orm_add(self):
         return self.ormcls.add(**self.form.get_values())
@@ -269,7 +302,7 @@ class CrudMixin(FormMixin):
         self.delete_when_completed()
 
     def delete_when_completed(self):
-        redirect(url_for(self.endpoint, action='manage'))
+        redirect(url_for(self.endpoint, action='manage', session_key=self.session_key))
 
 
 class CrudBase(SecureView, CrudMixin):
