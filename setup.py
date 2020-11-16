@@ -32,4 +32,16 @@ setup(
         'BlazeForm>=0.3.0',
         'BlazeWeb>=0.3.0',
     ],
+    extras_require={
+        'dev': [
+            'codecov',
+            'coverage',
+            'flake8',
+            'nose',
+            'pyquery',
+            'tox',
+            'webtest',
+            'wheel',
+        ]
+    }
 )
