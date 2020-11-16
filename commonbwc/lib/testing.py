@@ -9,7 +9,7 @@ def has_message(d, sev, message, container_id='user-messages'):
             continue
         if sev_wrapper.text() != sev:
             continue
-        if normalizews(li.text()) == '%s : %s' % (sev, message):
+        if normalizews(li.text()) == '%s: %s' % (sev, message):
             return True
 
 
