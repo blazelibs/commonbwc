@@ -1,3 +1,4 @@
+image: Visual Studio 2019
 environment:
   global:
     # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
@@ -8,20 +9,20 @@ environment:
   matrix:
     # Pre-installed Python versions, which Appveyor may upgrade to
     # a later point release.
-    - PYTHON: "C:\\Python27"
-      PYTHON_VERSION: "2.7.12"
+    - PYTHON: "C:\\Python36"
+      PYTHON_VERSION: "3.6.6"
       PYTHON_ARCH: "32"
-      TOXENV: py27
+      TOXENV: py36
 
-    - PYTHON: "C:\\Python34"
-      PYTHON_VERSION: "3.4.5"
+    - PYTHON: "C:\\Python37"
+      PYTHON_VERSION: "3.7.9"
       PYTHON_ARCH: "32"
-      TOXENV: py34
+      TOXENV: py37
 
-    - PYTHON: "C:\\Python35"
-      PYTHON_VERSION: "3.5.2"
+    - PYTHON: "C:\\Python38"
+      PYTHON_VERSION: "3.8.6"
       PYTHON_ARCH: "32"
-      TOXENV: py35
+      TOXENV: py38
 
 install:
   # Prepend newly installed Python to the PATH of this build (this cannot be
@@ -35,7 +36,7 @@ install:
   - pip --version
 
   # Install tox from the wheelhouse
-  - pip install --use-wheel --no-index --find-links=requirements/wheelhouse tox wheel codecov
+  - pip install tox wheel codecov
 
 # Not a C# project, build stuff at the test step instead.
 build: false  
