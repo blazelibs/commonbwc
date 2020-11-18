@@ -5,7 +5,7 @@ from blazeweb.views import SecureView
 from formencode.validators import String
 from webhelpers2.html import literal
 from webhelpers2.html.tags import link_to
-from werkzeug import cached_property
+from werkzeug.utils import cached_property
 
 try:
     from sqlalchemy.exc import IntegrityError
